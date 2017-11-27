@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  configserver:
+    image: 'piyushkhandelwal/pk-configserver:1.0'
+    ports:
+      - 8888:8888
+    volumes:
+      - ~/work/springboot/microservice/config-repo:/config-repo
+    networks:
+      - frontend
+
+  restapp:
+    image: 'piyushkhandelwal/pk-restapp:1.0'
+    ports:
+      - 7001:7001
+    environment:
+      - 'CONFIG_SERVER_URI=http://configserver:8888'
+    networks:
+      - frontend
+    restart: unless-stopped
+
+networks:
+  frontend:
+    driver: bridge
